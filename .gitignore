@@ -125,3 +125,12 @@ Thumbs.db
 
 # Node dependency directories
 node_modules/
+
+# Python virtual environments
+# In our course, let "venv/" (or ".venv/") be the name of the virtual environment directory created by PyCharm.
+# Activating virtual environment on Windows:
+# .\venv\Scripts\activate
+# Activating it on Mac / Linux:
+# source venv/bin/activate
+venv/
+.venv/
