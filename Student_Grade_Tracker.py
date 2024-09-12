@@ -17,7 +17,7 @@ def get_int(prompt):
 def get_float(prompt):
     while True:
         try:
-            return int(input(prompt))
+            return float(input(prompt))
         except ValueError:
             print("Invalid. Please enter a valid number.")
 
