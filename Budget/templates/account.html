@@ -1,8 +1,22 @@
 {% extends "base.html" %}
 
 {% block content %}
+<h1>Update Your Account</h1>
 
-    <p>Name: {{ current_user.name }}</p>
-    <p>Email: {{ current_user.email }}</p>
+<form method="POST">
+    {{ form.hidden_tag() }}
 
-{% endblock content %}
+    <div class="form-group">
+        <label for="name">Username</label>
+        {{ form.name(class="form-control") }}
+    </div>
+
+    <div class="form-group">
+        <label for="email">Email</label>
+        {{ form.email(class="form-control") }}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update Account</button>
+</form>
+
+{% endblock %}

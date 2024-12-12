@@ -1,19 +1,27 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-    {% if all_entries %}
-        {% for entry in all_entries%}
-            {% if entry.income %}
-                <p>Income: {{ entry.sum }}</p>
-                <p>Date: {{ datetime.strftime(entry.date, '%Y-%m-%d %H:%M') }}</p>
-            {% else %}
-            <!-- Cia truksta expense-->
-            {% endif %}
-            <a href="{{ url_for('delete', id=entry['id']) }}">Delete</a>
-            <a href="{{ url_for('update', id=entry['id']) }}">Update</a>
-            <hr>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for entry in all_entries %}
+        <tr>
+            <td>{{ entry.date.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+            <td>{{ "Income" if entry.income else "Expense" }}</td>
+            <td>{{ entry.sum }}</td>
+            <td>
+                <a href="{{ url_for('update', id=entry.id) }}" class="btn btn-link text-primary">Update</a>
+                <a href="{{ url_for('delete', id=entry.id) }}" class="btn btn-link text-danger">Delete</a>
+            </td>
+        </tr>
         {% endfor %}
-    {% endif %}
-
-{% endblock content %}
+    </tbody>
+</table>
+{% endblock %}

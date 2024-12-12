@@ -36,3 +36,8 @@ class EntryForm(FlaskForm):
     income = BooleanField('Income')
     sum = FloatField('Sum', [DataRequired()])
     submit = SubmitField('Submit')
+
+
+class UpdateAccountForm(FlaskForm):
+    name = StringField('Username', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Email()])

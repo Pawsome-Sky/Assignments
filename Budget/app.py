@@ -92,8 +92,11 @@ def login():
 def new_entry():
     form = forms.EntryForm()
     if form.validate_on_submit():
-        new_entry = Entry(income=True,
-                          sum=form.sum.data, user_id=current_user.id)
+        new_entry = Entry(
+            income=form.income.data,
+            sum=form.sum.data,
+            user_id=current_user.id
+        )
         db.session.add(new_entry)
         db.session.commit()
         flash('Entry was created successfully', 'success')
@@ -111,13 +114,37 @@ def entries():
 @app.route('/all_entries')
 @login_required
 def all_entries():
-    return render_template('all_entries.html')
+    all_entries = Entry.query.join(User, Entry.user_id == User.id).add_columns(
+        Entry.date, Entry.income, Entry.sum, User.name
+    ).all()
+    return render_template('all_entries.html', all_entries=all_entries, datetime=datetime)
 
 
-@app.route('/account')
+@app.route('/account', methods=['GET', 'POST'])
 @login_required
 def account():
-    return render_template('account.html')
+    form = forms.UpdateAccountForm()
+
+    if form.validate_on_submit():
+        existing_user = User.query.filter_by(name=form.name.data).first()
+        existing_email = User.query.filter_by(email=form.email.data).first()
+
+        if existing_user and existing_user.id != current_user.id:
+            flash('This username is already taken.', 'danger')
+        elif existing_email and existing_email.id != current_user.id:
+            flash('This email is already taken.', 'danger')
+        else:
+            current_user.name = form.name.data
+            current_user.email = form.email.data
+            db.session.commit()
+            flash('Your account has been updated!', 'success')
+            return redirect(url_for('account'))
+
+    elif request.method == 'GET':
+        form.name.data = current_user.name
+        form.email.data = current_user.email
+
+    return render_template('account.html', form=form)
 
 
 @app.route('/balance')
